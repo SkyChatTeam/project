@@ -5,7 +5,7 @@ services:
     image: mariadb10.5
     container_name: sky_db
     ports:
-      - "4306:3306"
+      - "4308:3306"
     volumes:
       - ./db-data/:/var/lib/mysql
       - ./docker/config/mariadb/custom.cnf:/etc/mysql/mariadb.conf.d/custom.cnf

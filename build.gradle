@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.13'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.project'
@@ -28,6 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
@@ -35,21 +37,43 @@ dependencies {
 
     /* mail */
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    /* Swagger */
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
-    /* jwt */
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-
-    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
+	/* QueryDSL */
+	implementation 'com.querydsl:querydsl-jpa'
+	implementation 'com.querydsl:querydsl-apt'
+//    /* Swagger */
+//    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+//
+//    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+//
+//    /* jwt */
+//    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+//    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+//    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+//
+//    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
 
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//querydsl 추가
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
