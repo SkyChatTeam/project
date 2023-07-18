@@ -1,0 +1,27 @@
+[client]
+default-character-set = utf8
+
+[mysqld]
+skip-host-cache
+skip-name-resolve
+datadir = /var/lib/mysql
+
+character-set-server=utf8
+collation-server=utf8_general_ci
+init-connect='SET NAMES UTF8;'
+
+innodb_use_native_aio=0
+log_bin=ON
+innodb-flush-method=O_DSYNC
+
+default-storage-engine=MYISAM
+bind-address            = 0.0.0.0
+max_allowed_packet=256M
+
+log_output=FILE
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/mysql-slow.log
+long_query_time = 1
+
+[mysql]
+default-character-set = utf8
